@@ -34,14 +34,14 @@
    ```shell
    docker compose exec postgres psql -U shopuser -d shoplist -c "SELECT * FROM products;"
    ```
-4. למחוק מוצר אחד בדפדפן, ולהריץ שוב את הפקודה.
+4. לסמן מוצר אחד כנקנה, ולמחוק מוצר אחר. להריץ שוב את הפקודה.
 
 **מה רואים כאן:**
 `docker compose exec` מריץ פקודה בתוך service שרץ, כמו `docker exec` משיעור 2, רק לפי שם ה-service. `psql` הוא הכלי של PostgreSQL, והוא כבר בתוך ה-image. הנתונים שהוספתן בדפדפן עברו דרך Nginx, ה-backend, ועד הטבלה.
 
 > **ב-Git Bash:** אם מופיע `the input device is not a TTY`, להוסיף `winpty` בהתחלה, או להוסיף `-T` אחרי `exec`.
 
-**בדיקה:** שלוש שורות בטבלה, ואחרי המחיקה שתיים.
+**בדיקה:** שלוש שורות בטבלה. אחרי השינויים: שתי שורות, ובאחת מהן `bought` הוא `t` (true).
 
 ---
 
@@ -97,6 +97,8 @@ Compose קורא אוטומטית קובץ בשם `.env` מאותה תיקייה
 GET /products/<id>   →  מחזיר מוצר אחד כ-JSON
                      →  מחזיר 404 עם {"error": "not found"} אם אין כזה
 ```
+
+**רמז:** להעתיק את `get_products` ולשנות אותה. בקוד כבר יש `COLUMNS` (רשימת העמודות) ו-`to_json` (הופכת שורה ל-JSON). השאילתה: `SELECT ... FROM products WHERE id = %s`, ו-`cur.fetchone()` מחזיר שורה אחת, או `None` אם אין.
 
 ואז, מהתיקייה `docker`:
 

@@ -7,18 +7,64 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>ShopList</h1>
-  <form id="add-form">
-    <input type="text" id="name" placeholder="Product name" required>
-    <input type="number" id="price" placeholder="Price" step="0.01" min="0" required>
-    <button type="submit">Add Product</button>
-  </form>
-  <ul id="product-list"></ul>
-  <section id="stats">
-    <h2>Stats</h2>
-    <p id="stats-text">Loading…</p>
-    <p class="hint">Served by the Node.js stats service</p>
-  </section>
+  <header>
+    <div>
+      <h1>ShopList</h1>
+      <p class="subtitle">A shopping list made of four microservices</p>
+    </div>
+    <div id="status" title="Checked every 10 seconds">
+      <span class="pill" id="status-backend"><i></i>backend</span>
+      <span class="pill" id="status-stats"><i></i>stats</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <form id="add-form">
+        <input type="text" id="name" placeholder="Product name" required maxlength="100">
+        <input type="number" id="price" placeholder="Price" step="0.01" min="0" required>
+        <input type="number" id="quantity" placeholder="Qty" min="1" value="1" required>
+        <select id="category"></select>
+        <button type="submit">Add</button>
+      </form>
+      <p id="form-error" class="error" hidden></p>
+    </section>
+
+    <section class="card">
+      <div class="progress-row">
+        <span id="progress-text">0 of 0 bought</span>
+        <div class="progress"><div id="progress-bar"></div></div>
+      </div>
+
+      <div class="toolbar">
+        <input type="search" id="search" placeholder="Search…">
+        <div class="tabs" id="filter">
+          <button type="button" data-filter="all" class="active">All</button>
+          <button type="button" data-filter="todo">To buy</button>
+          <button type="button" data-filter="bought">Bought</button>
+        </div>
+        <select id="sort">
+          <option value="new">Newest first</option>
+          <option value="name">Name A–Z</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="category">Category</option>
+        </select>
+      </div>
+
+      <ul id="product-list"></ul>
+      <p id="empty" class="empty" hidden>Nothing here yet. Add your first product above.</p>
+    </section>
+
+    <section id="stats" class="card">
+      <h2>Stats</h2>
+      <p id="stats-text">Loading…</p>
+      <div id="stats-cards" class="stat-cards"></div>
+      <div id="stats-categories" class="bars"></div>
+      <p class="hint">Served by the Node.js stats service</p>
+    </section>
+  </main>
+
   <script src="app.js"></script>
 </body>
 </html>

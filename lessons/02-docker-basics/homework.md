@@ -41,7 +41,7 @@
 - [ ] `CMD` בצורת exec, כלומר עם סוגריים מרובעים.
 - [ ] **מעל כל שורה, הערה בעברית** שמסבירה מה היא עושה. הערה ב-Dockerfile מתחילה ב-`#`.
 
-> **לא צריך את בלוק נטפרי בבית.** בכיתה נוסיף אותו אם צריך.
+> **ברשת של נטפרי:** אם ה-`pip install` נכשל, מוסיפים לו את הדגלים `--trusted-host pypi.org --trusted-host files.pythonhosted.org`, כמו ב-backend.
 
 ---
 
@@ -82,4 +82,4 @@ docker rm -f greeter
 
 **התוצאה הצפויה:** `{"message":"Shalom, Rivka!"}`
 
-אם ה-build נכשל בשלב ה-`pip install`, להוסיף את בלוק נטפרי מתחת לשורת ה-`FROM`, בדיוק כמו ב-backend.
+אם ה-build נכשל בשלב ה-`pip install`, להוסיף ל-`pip install` את הדגלים `--trusted-host pypi.org --trusted-host files.pythonhosted.org`, בדיוק כמו ב-backend.

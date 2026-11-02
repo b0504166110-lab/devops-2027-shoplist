@@ -12,14 +12,32 @@ async function getStats() {
     throw new Error(`backend returned ${response.status}`);
   }
   const products = await response.json();
-  const prices = products.map(p => Number(p.price));
-  const total = prices.reduce((sum, price) => sum + price, 0);
+  const round = n => Number(n.toFixed(2));
+  // An item costs price × quantity (3 bottles of milk at $5 = $15)
+  const cost = p => Number(p.price) * (p.quantity || 1);
+  const total = products.reduce((sum, p) => sum + cost(p), 0);
+  const left = products.filter(p => !p.bought);
+  const top = products.reduce((a, p) => (!a || Number(p.price) > Number(a.price) ? p : a), null);
+
+  const byCategory = {};
+  for (const p of products) {
+    const c = p.category || 'Other';
+    byCategory[c] = byCategory[c] || { category: c, count: 0, total: 0 };
+    byCategory[c].count += 1;
+    byCategory[c].total += cost(p);
+  }
 
   return {
     count: products.length,
-    total: Number(total.toFixed(2)),
-    average: products.length ? Number((total / products.length).toFixed(2)) : 0,
-    max: products.length ? Math.max(...prices) : 0
+    bought: products.length - left.length,
+    total: round(total),
+    leftToSpend: round(left.reduce((sum, p) => sum + cost(p), 0)),
+    average: products.length ? round(total / products.length) : 0,
+    max: top ? Number(top.price) : 0,
+    mostExpensive: top ? { name: top.name, price: Number(top.price) } : null,
+    byCategory: Object.values(byCategory)
+      .map(c => ({ ...c, total: round(c.total) }))
+      .sort((a, b) => b.total - a.total)
   };
 }
 

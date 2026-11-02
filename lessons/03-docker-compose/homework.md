@@ -81,4 +81,4 @@ docker compose down
 
 **התוצאה הצפויה:** `Shalom, Rivka!` ו-`Hello, Rivka!`, ושני services ב-`docker compose ps`.
 
-אם ה-build נכשל בשלב ה-`pip install`, צריך את בלוק נטפרי ב-Dockerfile של greeter, כמו ב-backend.
+אם ה-build נכשל בשלב ה-`pip install`, צריך להוסיף ל-`pip install` של greeter את הדגלים `--trusted-host pypi.org --trusted-host files.pythonhosted.org`, כמו ב-backend.

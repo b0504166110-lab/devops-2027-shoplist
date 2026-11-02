@@ -22,3 +22,4 @@ node_modules/
 
 # Offline pip packages (copied from the teacher USB)
 wheels/
+dist/

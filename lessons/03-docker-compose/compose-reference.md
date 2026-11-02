@@ -58,6 +58,7 @@ services:            # מפתח, ואחריו נקודתיים
 |---|---|---|
 | `image` | להשתמש ב-image מוכן | `image: postgres:15-alpine` |
 | `build: context:` | לבנות image מ-Dockerfile בתיקייה הזו (יחסית לקובץ) | `context: ../app/backend` |
+| `build: dockerfile:` | Dockerfile בשם אחר בתוך ה-context (ברירת המחדל: `Dockerfile`) | `dockerfile: Dockerfile.dev` |
 | `environment` | משתני סביבה, כמו `-e` | `DB_HOST: postgres` |
 | `ports` | פורט במחשב : פורט ב-container, כמו `-p` | `- "8080:80"` |
 | `volumes` | volume בשם או קובץ מהמחשב : נתיב ב-container | `- postgres-data:/var/lib/postgresql/data` |

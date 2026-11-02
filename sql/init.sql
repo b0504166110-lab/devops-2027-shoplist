@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS products (
+    id        SERIAL PRIMARY KEY,
+    name      VARCHAR(100) NOT NULL,
+    price     NUMERIC(10, 2) NOT NULL,
+    quantity  INTEGER NOT NULL DEFAULT 1,
+    category  VARCHAR(30) NOT NULL DEFAULT 'Other',
+    bought    BOOLEAN NOT NULL DEFAULT FALSE
+);

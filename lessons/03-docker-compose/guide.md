@@ -182,9 +182,12 @@ docker build -t shoplist-frontend:local app/frontend
 
 ```sql
 CREATE TABLE IF NOT EXISTS products (
-    id     SERIAL PRIMARY KEY,
-    name   VARCHAR(100) NOT NULL,
-    price  NUMERIC(10, 2) NOT NULL
+    id        SERIAL PRIMARY KEY,
+    name      VARCHAR(100) NOT NULL,
+    price     NUMERIC(10, 2) NOT NULL,
+    quantity  INTEGER NOT NULL DEFAULT 1,
+    category  VARCHAR(30) NOT NULL DEFAULT 'Other',
+    bought    BOOLEAN NOT NULL DEFAULT FALSE
 );
 ```
 
@@ -193,8 +196,12 @@ CREATE TABLE IF NOT EXISTS products (
 | `SERIAL PRIMARY KEY` | מספר מזהה שגדל לבד לכל מוצר חדש |
 | `IF NOT EXISTS` | בטוח להריץ שוב ושוב: הטבלה נוצרת רק פעם אחת |
 | `NUMERIC(10, 2)` | מחיר עם שתי ספרות אחרי הנקודה |
+| `DEFAULT 1` | ערך שנכנס אם לא שלחו ערך אחר. מוצר חדש מתחיל בכמות 1, בקטגוריה `Other`, ולא נקנה (`FALSE`) |
+| `BOOLEAN` | אמת או שקר: האם כבר קנינו את המוצר |
 
 ה-image של postgres מריץ אוטומטית כל קובץ SQL בתיקייה `/docker-entrypoint-initdb.d/`, **רק בהפעלה הראשונה**, כשמסד הנתונים עוד ריק. בשלב הבא נחבר את הקובץ לשם.
+
+> **הרצתן כבר את ShopList עם `init.sql` ישן?** אם הוספת מוצר נכשלת והלוג של ה-backend מראה `column "quantity" does not exist`, המסד נוצר בלי העמודות החדשות. `docker compose down -v` ואז `docker compose up -d --build` יוצרים אותו מחדש.
 
 ---
 
@@ -267,7 +274,7 @@ volumes:
 
 **שימו לב מה אין:** ל-backend, ל-stats ול-postgres אין `ports:`. הם פנימיים. אפשר להגיע אליהם רק מתוך הרשת של Compose, לא מהדפדפן.
 
-> **ברשת של הכיתה (נטפרי):** Compose בונה את ה-backend מה-Dockerfile שלכן, כולל בלוק נטפרי משיעור 2. אין צורך בשינוי.
+> **ברשת של נטפרי:** Compose בונה את ה-backend מה-Dockerfile שלכן, כולל הדגלים `--trusted-host` משיעור 2. אין צורך בשינוי.
 
 ---
 
@@ -290,7 +297,13 @@ stats-1     | stats service listening on 0.0.0.0:3000, backend at http://backend
 frontend-1  | ... Configuration complete; ready for start up
 ```
 
-לפתוח בדפדפן את **`http://localhost:8080`**. להוסיף שני מוצרים. לבדוק שהם מופיעים ברשימה, ושתיבת ה-**Stats** מציגה כמות, סכום וממוצע.
+לפתוח בדפדפן את **`http://localhost:8080`**, ולנסות:
+- להוסיף שלושה מוצרים, עם כמות וקטגוריה.
+- לסמן מוצר אחד כנקנה (תיבת הסימון משמאל), ולערוך מוצר אחר (✎).
+- לבדוק שתיבת ה-**Stats** מציגה כמה נקנה, סכום, כמה נשאר לשלם, ועמודה לכל קטגוריה.
+- למעלה מימין: שתי נוריות ירוקות, `backend` ו-`stats`.
+
+כל פעולה בדף עוברת את כל הדרך: דפדפן, Nginx, ה-backend, ו-postgres.
 
 **בחלון טרמינל נוסף**, מתוך התיקייה `docker`:
 
@@ -310,13 +323,13 @@ docker compose ps
 docker compose stop stats
 ```
 
-לרענן את הדפדפן. המוצרים עובדים, ותיבת ה-Stats מודיעה שהסרוויס לא זמין. **זה הרעיון של מיקרו-סרוויסים משיעור 1:** סרוויס אחד נפל, והשאר ממשיכים.
+לרענן את הדפדפן. המוצרים עובדים, תיבת ה-Stats מודיעה שהסרוויס לא זמין, והנורית של `stats` אדומה. **זה הרעיון של מיקרו-סרוויסים משיעור 1:** סרוויס אחד נפל, והשאר ממשיכים.
 
 ```shell
 docker compose start stats
 ```
 
-לרענן שוב. הסטטיסטיקות חזרו.
+לרענן שוב. הסטטיסטיקות חזרו, והנורית ירוקה.
 
 ---
 
