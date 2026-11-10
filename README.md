@@ -65,8 +65,8 @@ Browser → frontend (Nginx :80) → backend (Flask :5000) → postgres (Postgre
 | 2 | Docker: images, containers ו-Dockerfile | [02-docker-basics](lessons/02-docker-basics/) |
 | 3 | רשתות, volumes ו-multi-stage: מושגים, והיכרות עם Compose | [03-docker-compose](lessons/03-docker-compose/) |
 | 4 | רשתות, volumes ו-Docker Compose לעומק: בונים את ShopList | [04-compose-networks-volumes](lessons/04-compose-networks-volumes/) |
-| 5 | Kubernetes: מה זה cluster, ו-cluster מקומי | יעלה בהמשך |
-| 6 | Kubernetes: ShopList ב-cluster | יעלה בהמשך |
+| 5 | Kubernetes: מה זה cluster, ו-cluster מקומי | [05-k8s-cluster](lessons/05-k8s-cluster/) |
+| 6 | Kubernetes: ShopList ב-cluster | [06-k8s-deploy](lessons/06-k8s-deploy/) |
 | 7 | Helm | יעלה בהמשך |
 | 8 | CI/CD: מושגים וכתיבת פייפליין | יעלה בהמשך |
 | 9 | Registry ו-GitHub Actions | יעלה בהמשך |
