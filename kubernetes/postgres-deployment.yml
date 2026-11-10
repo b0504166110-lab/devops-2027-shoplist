@@ -1,0 +1,42 @@
+# postgres-deployment.yml - keeps one postgres pod running
+# Uses three other files by name: the Secret, the ConfigMap and the PVC
+apiVersion: apps/v1
+kind: ____                          # which resource keeps pods running?
+metadata:
+  name: postgres
+  namespace: shoplist
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ____                     # the label this Deployment looks for
+  template:
+    metadata:
+      labels:
+        app: ____                   # the label it puts on its pods. Must match the line above
+    spec:
+      containers:
+        - name: postgres
+          image: ____               # same image as in Compose: version 15, alpine
+          envFrom:
+            - secretRef:
+                name: ____          # name of the Secret (postgres-secret.yml)
+          ports:
+            - containerPort: ____   # postgres port
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "____", "-d", "____"]   # user and database from the Secret, plain text
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: ____            # must match the storage volume name below
+              mountPath: /var/lib/postgresql/data
+            - name: ____            # must match the init.sql volume name below
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: ____         # name of the PVC (postgres-pvc.yml)
+        - name: postgres-init
+          configMap:
+            name: ____              # name of the ConfigMap (postgres-configmap.yml)

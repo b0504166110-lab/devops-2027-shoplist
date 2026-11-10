@@ -67,7 +67,7 @@ Browser → frontend (Nginx :80) → backend (Flask :5000) → postgres (Postgre
 | 4 | רשתות, volumes ו-Docker Compose לעומק: בונים את ShopList | [04-compose-networks-volumes](lessons/04-compose-networks-volumes/) |
 | 5 | Kubernetes: מה זה cluster, ו-cluster מקומי | [05-k8s-cluster](lessons/05-k8s-cluster/) |
 | 6 | Kubernetes: ShopList ב-cluster | [06-k8s-deploy](lessons/06-k8s-deploy/) |
-| 7 | Helm | יעלה בהמשך |
+| 7 | Helm: ShopList באריזה אחת | [07-helm](lessons/07-helm/) |
 | 8 | CI/CD: מושגים וכתיבת פייפליין | יעלה בהמשך |
 | 9 | Registry ו-GitHub Actions | יעלה בהמשך |
 | 10 | פרויקט הגמר | יעלה בהמשך |

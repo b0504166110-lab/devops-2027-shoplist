@@ -1,0 +1,12 @@
+# stats-service.yml - your turn (step 9b). Keys only, the values are up to you
+apiVersion:
+kind:
+metadata:
+  name:            # this name is the address. nginx.conf looks for it
+  namespace:
+spec:
+  selector:
+    app:           # must match the label in stats-deployment.yml
+  ports:
+    - port:
+      targetPort:

@@ -1,0 +1,7 @@
+# namespace.yml - ShopList's own section of the cluster
+# Fill in every ____ along with the slides.
+# A Namespace has no spec: it is just a name.
+apiVersion: v1
+kind: ____            # which resource creates a separate section in the cluster?
+metadata:
+  name: ____          # same name as in lesson 5. Every other file uses it in namespace:

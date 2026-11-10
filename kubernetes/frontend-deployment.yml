@@ -1,0 +1,11 @@
+# frontend-deployment.yml - your turn (step 9c). Blank page
+# Hint: copy stats-deployment.yml here and delete what you don't need
+#
+# Checklist:
+#   [ ] four levels: apiVersion, kind, metadata, spec
+#   [ ] app: frontend in two places, identical
+#   [ ] image: shoplist-frontend:local and imagePullPolicy: Never
+#   [ ] containerPort: 80
+#   [ ] no env, no Secret, no readinessProbe
+#
+# Before apply: kubectl apply --dry-run=server -f kubernetes/frontend-deployment.yml

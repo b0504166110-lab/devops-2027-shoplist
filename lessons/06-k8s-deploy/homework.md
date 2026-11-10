@@ -263,6 +263,13 @@ docker build -f app/frontend/Dockerfile.multistage -t shoplist-frontend:multi ap
 - [ ] בתחתית הדף: השורה `Build: <תאריך>`. היא מגיעה מ-`build.js`, כלומר מהמטבח.
 - [ ] ב-`answers.md`: מה קרה ל-pod הישן כששיניתן את ה-image? האם הייתה שנייה שבה האפליקציה לא עבדה?
 
+### ד12 — livenessProbe ל-backend
+**עזרה:** guide.md, "readiness מול liveness"
+
+- [ ] ב-`backend-deployment.yml`, להוסיף `livenessProbe` מסוג `httpGet` ל-`/health` בפורט 5000, עם `initialDelaySeconds: 15`, `periodSeconds: 20` ו-`failureThreshold: 3`. להחיל.
+- [ ] `kubectl describe pod -n shoplist -l app=backend`: רואים שתי שורות, `Liveness:` ו-`Readiness:`.
+- [ ] ב-`answers.md`: backend נתקע (רץ, אבל לא עונה). מה קורה עם readiness בלבד, ומה קורה כשיש גם liveness? ולמה אסור ש-liveness יבדוק את postgres?
+
 ---
 
 ## 6. מה בודקים
@@ -275,7 +282,7 @@ docker build -f app/frontend/Dockerfile.multistage -t shoplist-frontend:multi ap
 | ד8: לשבור ולתקן, והסבר | 10 |
 | ד9: צילומי מסך | 10 |
 | ד10: שאלות | 10 |
-| ד11: בונוס | +5 |
+| ד11–ד12: בונוס | +5 כל אחד |
 
 ---
 

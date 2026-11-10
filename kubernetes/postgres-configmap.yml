@@ -1,0 +1,9 @@
+# postgres-configmap.yml - init.sql, creates the table on first start
+apiVersion: v1
+kind: ____                  # which resource stores regular (non-secret) configuration?
+metadata:
+  name: postgres-init       # postgres-deployment mounts it by this exact name
+  namespace: shoplist
+data:
+  ____: |                   # file name inside the container (same as in the sql/ folder)
+    -- replace this line with the content of sql/init.sql, indented by 4 spaces
