@@ -1,0 +1,52 @@
+# מסד הנתונים של האפליקציה, ה-backend מדבר איתו.
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: shoplist
+      POSTGRES_USER: shopuser
+      POSTGRES_PASSWORD: shoppass
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopuser -d shoplist"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # שרת ה-API של האפליקציה, מדבר עם postgres ומקבל בקשות מ-frontend ומ-stats.
+  backend:
+    build:
+      context: ../app/backend
+    environment:
+      DB_HOST: postgres
+      DB_NAME: shoplist
+      DB_USER: shopuser
+      DB_PASSWORD: shoppass
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # שירות הסטטיסטיקות, מדבר עם backend ומקבל בקשות מ-frontend.
+  stats:
+    build:
+      context: ../app/stats
+    environment:
+      BACKEND_URL: http://backend:5000
+    depends_on:
+      - backend
+
+  # שרת Nginx שמגיש את האתר לדפדפן ומעביר בקשות ל-backend ול-stats.
+  frontend:
+    build:
+      context: ../app/frontend
+      dockerfile: Dockerfile.multistage
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+      - stats
+
+volumes:
+  postgres-data:
