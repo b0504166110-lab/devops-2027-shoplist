@@ -1,12 +1,12 @@
-# stats-service.yml - your turn (step 9b). Keys only, the values are up to you
-apiVersion:
-kind:
+# stats-service.yml - a stable address for stats
+apiVersion: v1
+kind: Service
 metadata:
-  name:            # this name is the address. nginx.conf looks for it
-  namespace:
+  name: stats          # this name is the address. nginx.conf looks for it
+  namespace: shoplist
 spec:
   selector:
-    app:           # must match the label in stats-deployment.yml
+    app: stats         # must match the label in stats-deployment.yml
   ports:
-    - port:
-      targetPort:
+    - port: 3000
+      targetPort: 3000
