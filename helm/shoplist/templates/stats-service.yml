@@ -1,0 +1,12 @@
+# stats-service.yml - a stable address for stats
+apiVersion: v1
+kind: Service
+metadata:
+  name: stats          # this name is the address. nginx.conf looks for it
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: stats         # must match the label in stats-deployment.yml
+  ports:
+    - port: 3000
+      targetPort: 3000

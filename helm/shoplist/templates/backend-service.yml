@@ -1,0 +1,12 @@
+# backend-service.yml - a stable address for the backend
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend # nginx.conf and stats use this exact name
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: backend # label from backend-deployment.yml
+  ports:
+    - port: 5000
+      targetPort: 5000

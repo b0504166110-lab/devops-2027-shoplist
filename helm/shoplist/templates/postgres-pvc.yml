@@ -1,0 +1,14 @@
+# postgres-pvc.yml - request for persistent storage. Products survive when the pod is deleted
+apiVersion: v1
+kind: PersistentVolumeClaim # which resource requests persistent storage? (three words, no spaces)
+metadata:
+  name: postgres-pvc # postgres-deployment requests the storage by this exact name
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - ReadWriteOnce # only one node writes at a time
+  resources:
+    requests:
+      storage: {{ .Values.postgres.storage }}

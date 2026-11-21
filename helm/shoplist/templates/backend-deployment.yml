@@ -1,0 +1,56 @@
+# backend-deployment.yml - the image we built, with passwords from the Secret
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: backend                  # the backend label
+  template:
+    metadata:
+      labels:
+        app: backend                # exactly the same label
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DB_HOST               # name of the postgres Service. Not a secret, so written directly
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret     # name of the Secret
+                  key: POSTGRES_DB          # which Secret key holds the database name?
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER        # which key holds the user?
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD    # which key holds the password?
+          resources:
+            requests:
+              cpu: {{ .Values.backend.resources.requests.cpu | quote }}
+              memory: {{ .Values.backend.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.backend.resources.limits.cpu | quote }}
+              memory: {{ .Values.backend.resources.limits.memory }}
+          ports:
+            - containerPort: 5000           # Flask port
+          readinessProbe:
+            httpGet:
+              path: /health                 # the endpoint that answers "I am ready"
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10

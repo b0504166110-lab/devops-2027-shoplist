@@ -1,0 +1,39 @@
+{{- if .Values.backup.enabled }}
+# backup-cronjob.yml - pg_dump of the products, every night, into backup-pvc
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup
+  namespace: {{ .Release.Namespace }}
+spec:
+  schedule: {{ .Values.backup.schedule | quote }}
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: postgres:15-alpine
+              envFrom:
+                - secretRef:
+                    name: postgres-secret
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  FILE=/backup/shoplist-$(date +%Y%m%d-%H%M).sql
+                  PGPASSWORD="$POSTGRES_PASSWORD" pg_dump -h postgres -U "$POSTGRES_USER" "$POSTGRES_DB" > "$FILE"
+                  echo "backup saved: $FILE"
+                  ls -lh /backup
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+          volumes:
+            - name: backup
+              persistentVolumeClaim:
+                claimName: backup-pvc
+{{- end }}

@@ -1,0 +1,16 @@
+{{- if .Values.backup.enabled }}
+# backup-pvc.yml - a separate storage for the nightly backups
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-pvc
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.backup.storage }}
+{{- end }}
