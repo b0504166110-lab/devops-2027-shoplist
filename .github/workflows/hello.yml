@@ -1,24 +1,25 @@
-name: Website
+name: Hello
 
-on:
-  push:
-    branches: [main]
+on: push
 
 jobs:
-  check:
+  hello:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - run: python3 -m py_compile site/*.py
+      - name: Say hello
+        run: echo "Hello from the robot kitchen"
 
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Building docs"
+      - name: Who am I, and where?
+        run: |
+          echo "Repo:   $GITHUB_REPOSITORY"
+          echo "Commit: $GITHUB_SHA"
+          uname -a
+          docker --version
+          python3 --version
+          node --version
 
-  publish:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - run: echo "Publishing"
+      - name: Get the code
+        uses: actions/checkout@v6
+
+      - name: What is in the repo?
+        run: ls
